@@ -84,16 +84,28 @@ class mywindow(QtWidgets.QMainWindow):
         periodicity = self.statistic.relative_frequency_range
 
         for i in range(columnCount):
-            self.ui.frequencyTable.setItem(0, i, QtWidgets.QTableWidgetItem(str(variationSerias[i])))
+            var = "%g" % variationSerias[i]
+            frec = "%g" % frequency[i]
+            per = "%g" % periodicity[i]
+            
+            sectionFrequencySize = max(len(var), len(frec)) * 12
+            self.ui.frequencyTable.horizontalHeader().resizeSection(i, sectionFrequencySize)
+            self.ui.frequencyTable.setHorizontalHeaderItem(i, QtWidgets.QTableWidgetItem(''))
+
+            self.ui.frequencyTable.setItem(0, i, QtWidgets.QTableWidgetItem(var))
             self.ui.frequencyTable.item(0, i).setFlags(QtCore.Qt.ItemIsEnabled)
 
-            self.ui.frequencyTable.setItem(1, i, QtWidgets.QTableWidgetItem(str(frequency[i])))
+            self.ui.frequencyTable.setItem(1, i, QtWidgets.QTableWidgetItem(frec))
             self.ui.frequencyTable.item(1, i).setFlags(QtCore.Qt.ItemIsEnabled)
             
-            self.ui.periodicityTable.setItem(0, i, QtWidgets.QTableWidgetItem(str(variationSerias[i])))
+            sectionPeriodicitySize = max(len(var), len(per)) * 12
+            self.ui.periodicityTable.horizontalHeader().resizeSection(i, sectionPeriodicitySize)
+            self.ui.periodicityTable.setHorizontalHeaderItem(i, QtWidgets.QTableWidgetItem(''))
+            
+            self.ui.periodicityTable.setItem(0, i, QtWidgets.QTableWidgetItem(var))
             self.ui.periodicityTable.item(0, i).setFlags(QtCore.Qt.ItemIsEnabled)
             
-            self.ui.periodicityTable.setItem(1, i, QtWidgets.QTableWidgetItem(str(periodicity[i])))
+            self.ui.periodicityTable.setItem(1, i, QtWidgets.QTableWidgetItem(per))
             self.ui.periodicityTable.item(1, i).setFlags(QtCore.Qt.ItemIsEnabled)
 
 
@@ -160,7 +172,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.graphWidget.setLabel('left', symbol + "(x)", **self.style1)
         self.ui.graphWidget.setLabel('bottom', "x", **self.style1)
                 
-        self.ui.graphWidget.plot(variationSeries, periodicity, pen=self.pen)
+        self.ui.graphWidget.plot(variationSeries, periodicity, pen=self.pen, symbol='d', symbolSize=15, symbolBrush='r')
 
     
     
