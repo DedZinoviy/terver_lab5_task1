@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1712</width>
+    <width>1742</width>
     <height>837</height>
    </rect>
   </property>
@@ -177,6 +177,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Числовые характеристики</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string/>
@@ -335,7 +342,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1712</width>
+     <width>1742</width>
      <height>34</height>
     </rect>
    </property>

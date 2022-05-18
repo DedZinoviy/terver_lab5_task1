@@ -40,17 +40,16 @@ class mywindow(QtWidgets.QMainWindow):
             line = file.readline()
             
             serias = line.split(' ')
-            serias = [int(var) for var in serias]
+            serias = [float(var) for var in serias]
             self.statistic.setSeriesList(serias)
             
-            string_serias = ", ".join(str(var) for var in self.statistic.variation_range)
+            string_serias = ", ".join("%g" % var for var in self.statistic.variation_range)
             self.ui.variationSeriesText.setText(string_serias)
+            self.solve()
         except:
             QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Ошибка ввода!\nПроверьте корректность входного файла")
 
-        self.solve()
 
-    
     def solve(self):
         self.setTables()
         self.buildPlot()
@@ -111,7 +110,7 @@ class mywindow(QtWidgets.QMainWindow):
 
     def setFunction(self):
         string_function = ""
-        patern_string = "%g, при %d < x ≤ %d"
+        patern_string = "%g, при %g < x ≤ %g"
         amount = len(self.statistic.variants)
         var = self.statistic.variants
         f = self.statistic.distribution_function
@@ -161,7 +160,7 @@ class mywindow(QtWidgets.QMainWindow):
     
     def plotPoligon(self, variationSeries : list, periodicity : list, type : PoligonType):
         symbols = ["n", "w"]
-        texts = ["частоты", "относительной частоты"]
+        texts = ["частот", "относительных частот"]
 
         symbol = symbols[type.value]
         text = texts[type.value]
