@@ -1,6 +1,6 @@
 from statisticalDataSmallArray import Statistic
 import numpy as np
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from ui import Ui_MainWindow
 from pyqtgraph import PlotWidget
 import pyqtgraph as pg
@@ -21,9 +21,17 @@ class mywindow(QtWidgets.QMainWindow):
         self.pen = pg.mkPen(color='r', width=3)
         self.pen1 = pg.mkPen(color='r', width=2, style=QtCore.Qt.DashLine)
         self.style1 = {'font-size':'30px'}
-        
+        font = QtGui.QFont()
+        font.setPointSize(12)
+
         self.ui.graphWidget.setBackground((225, 225, 225))
-        self.ui.graphWidget.showGrid(x=True, y=True, alpha=1)
+        self.ui.graphWidget.getAxis('left').setPen('black')
+        self.ui.graphWidget.getAxis('left').setTextPen('black')
+        self.ui.graphWidget.getAxis("left").setStyle(tickFont = font)
+        self.ui.graphWidget.getAxis('bottom').setPen('black')
+        self.ui.graphWidget.getAxis('bottom').setTextPen('black')
+        self.ui.graphWidget.getAxis("bottom").setStyle(tickFont = font)
+        self.ui.graphWidget.showGrid(x=True, y=True, alpha=0.6)
 
         self.ui.plotType.currentIndexChanged.connect(self.buildPlot)
         self.ui.openFileAction.triggered.connect(self.openFile)
@@ -45,6 +53,7 @@ class mywindow(QtWidgets.QMainWindow):
             
             string_serias = ", ".join("%g" % var for var in self.statistic.variation_range)
             self.ui.variationSeriesText.setText(string_serias)
+            self.ui.amountBox.setValue(len(self.statistic.series_list))
             self.solve()
         except:
             QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Ошибка ввода!\nПроверьте корректность входного файла")
@@ -115,11 +124,11 @@ class mywindow(QtWidgets.QMainWindow):
         var = self.statistic.variants
         f = self.statistic.distribution_function
 
-        string_function += "0, при x ≤ " + str(var[0]) + "\n"
+        string_function += "0, при x ≤ %g" % var[0] + "\n"
         for i in range(amount - 1):
             string_function += patern_string % (f[i + 1], var[i], var[i + 1])
             string_function += "\n"
-        string_function += "1, при x > " + str(var[amount - 1])
+        string_function += "1, при x > %g" % var[amount - 1]
 
         self.ui.functionEdit.setText(string_function)
 
@@ -149,8 +158,10 @@ class mywindow(QtWidgets.QMainWindow):
             yi = [function[i + 1], function[i + 1]]
             self.ui.graphWidget.plot(xi, yi, pen=self.pen)
 
-        self.ui.graphWidget.plot([-100 * variationSeries[amount - 1], variationSeries[0]], [0, 0], pen=self.pen)    
-        self.ui.graphWidget.plot([variationSeries[amount - 1], 100 * variationSeries[amount - 1]], [1, 1], pen=self.pen)
+        
+        lastElement = abs(max(variationSeries, key=abs))
+        self.ui.graphWidget.plot([-100 * lastElement, variationSeries[0]], [0, 0], pen=self.pen)    
+        self.ui.graphWidget.plot([variationSeries[amount - 1], 100 * lastElement], [1, 1], pen=self.pen)
 
         for i in range(amount):
             xi = [variationSeries[i], variationSeries[i]]
