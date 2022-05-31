@@ -45,10 +45,15 @@ class mywindow(QtWidgets.QMainWindow):
 
         try:
             file = open(fileName, 'r', encoding='utf-8')
-            line = file.readline()
+            lines = file.readlines()
+            serias = []
             
-            serias = line.split(' ')
-            serias = [float(var) for var in serias]
+            for line in lines:
+                line = line.strip()
+                line = line.split()
+                for var in line:
+                    serias.append(float(var))
+            
             self.statistic.setSeriesList(serias)
             
             string_serias = ", ".join("%g" % var for var in self.statistic.variation_range)
