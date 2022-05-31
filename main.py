@@ -6,6 +6,7 @@ from pyqtgraph import PlotWidget
 import pyqtgraph as pg
 import sys
 from enum import Enum
+from os import system
 
 class PoligonType(Enum):
     FREQUENCY = 0
@@ -35,9 +36,14 @@ class mywindow(QtWidgets.QMainWindow):
 
         self.ui.plotType.currentIndexChanged.connect(self.buildPlot)
         self.ui.openFileAction.triggered.connect(self.openFile)
+        self.ui.helpAction.triggered.connect(self.getHelp)
 
         self.statistic = Statistic()
         
+
+    def getHelp(self):
+        system("start doc/Manual.pdf")
+
 
     def openFile(self):
         fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Открыть файл", "./", "Text file (*.txt)")
